@@ -1,16 +1,7 @@
 class Computer:
     def __init__(self):
         self.failed = False
+        self.prior = None
+        self.tot_comps = tot_comps
+        self.value = value
 
-    def deliver_message(self, message):
-        if message.type == "PREPARE":
-            pass
-
-        elif message.type == "PROMISE":
-            pass
-
-        elif message.type == "ACCEPT":
-            pass
-
-        elif message.type == "REJECT":
-            pass
