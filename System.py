@@ -1,7 +1,7 @@
 from Computer import Computer
 from Message import Message
 from Network import Network
-from main import *
+from message_functions import *
 
 
 class DisSystem:
@@ -15,6 +15,11 @@ class DisSystem:
     def deliver_message(self, computer, message):
         if message.type == "PROPOSE":
             computer.value = message.value
+
+            if computer.prior == 0:
+                computer.prior = self.n
+                computer.prior_value = message.value
+
             for acceptor in self.A:
                 m = Message(computer, acceptor, "PREPARE", None, self.n)
                 queue_message(self.N, m)
@@ -23,9 +28,9 @@ class DisSystem:
             m = Message(computer, message.src, "PROMISE", computer.value, self.n)
             queue_message(self.N, m)    # TODO: create functie for prior
 
-
-
         elif message.type == "PROMISE":
+            prior = f"(Prior: {None if message.src.prior == 0 else f'n={message.src.prior}, v= {message.src.value}'})"
+            print(f"{self.current_tick.zfill(3)}: {message.src.name} -> {message.dst.name}  {message.type}  n={self.n}  {prior}")
             if message.src.value is None:
                 val = computer.value
             else:
@@ -62,12 +67,13 @@ class DisSystem:
         # a2 = Computer()
         # a3 = Computer()
         for t in range(tmax):
-            if self.N.queue.len() == 0 or E.len() == 0:
+
+            if len(self.N.queue) == 0 and len(E) == 0:
                 return
             e = E[0] if t == E[0][0] else None
             if e is not None:
                 E.remove(e)
-                (t, F, R, pi_c, pi_v) = e
+                (i, F, R, pi_c, pi_v) = e
 
                 # Fail computers
                 for computer in F:
@@ -79,6 +85,7 @@ class DisSystem:
                         for acceptor in self.A:
                             if acceptor.name == computer:
                                 acceptor.failed = True
+                                print(f"{t.zfill(3)}: ** {acceptor.name} kapot **")
 
                 # Repair computers
                 for computer in R:
@@ -90,6 +97,7 @@ class DisSystem:
                         for acceptor in self.A:
                             if acceptor.name == computer:
                                 acceptor.failed = False
+                                print(f"{t.zfill(3)}: ** {acceptor.name} gerepareerd **")
 
                 if pi_v is not None and pi_c is not None:
                     self.n += 1
@@ -98,4 +106,20 @@ class DisSystem:
             else:
                 m = extract_message(self.N)
                 if m is not None:
-                    deliver_message(m.dst, m)
+                    self.current_tick = t
+                    self.deliver_message(m.dst, m)
+                else:
+                    print(f"{str(t).zfill(3)}:")
+        print()
+        for success in self.success:
+            print(success)
+
+#TODO:
+fixes = """
+=============================================
+TODO VOOR VOLGENDE KEER
+- Prior fixen (voorbeeld 2 regel 16)
+- propose nummer fixen (voorbeeld 2 regel 27)
+- fix self.n
+- fix promise prior (voorbeeld 2 regel 18) value wordt niet overschreven
+"""

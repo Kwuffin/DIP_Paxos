@@ -4,41 +4,6 @@ from Message import Message
 from Network import Network
 
 
-def queue_message(network, message):
-    network.queue.append(message)
-
-
-def extract_message(network):
-    if network.queue:
-
-        for message in network.queue:
-
-            if not message.src.failed and not message.dst.failed:
-                network.queue.remove(message)
-                return message
-
-
-def deliver_message(computer, message):
-
-    if message.type == "PROPOSE":
-        pass
-
-    elif message.type == "PREPARE":
-        pass
-
-    elif message.type == "PROMISE":
-        pass
-
-    elif message.type == "ACCEPT":
-        pass
-
-    elif message.type == "ACCEPTED":
-        pass
-
-    elif message.type == "REJECTED":
-        pass
-
-
 def give_inputs():
     print("Give inputs\n"
           "'0 END' will end the input session.")
@@ -56,7 +21,6 @@ def give_inputs():
         tuple_list.append(str.split(" "))
 
     return tuple_list
-
 
 
 # bijv 1:
