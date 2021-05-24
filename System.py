@@ -6,8 +6,8 @@ from message_functions import *
 
 class DisSystem:
     def __init__(self):
-        self.P = set()      # Proposers
-        self.A = set()      # Acceptors
+        self.P = []     # Proposers
+        self.A = []     # Acceptors
         self.N = Network()  # queue
         self.total_computers = None       # Computers
         self.n = 0
@@ -58,7 +58,7 @@ class DisSystem:
         for i in range(n_p):
             self.P.add(Computer(f"P{i + 1}", tot_comps=self.total_computers))
         for i in range(n_a):
-            self.A.add(Computer(f"A{i + 1}", tot_comps=self.total_computers))
+            self.A.append(Computer(f"A{i + 1}", tot_comps=self.total_computers))
         self.total_computers = len(self.A) + 1
         # p1 = Computer()
         # p2 = Computer()
@@ -118,8 +118,5 @@ class DisSystem:
 fixes = """
 =============================================
 TODO VOOR VOLGENDE KEER
-- Prior fixen (voorbeeld 2 regel 16)
-- propose nummer fixen (voorbeeld 2 regel 27)
-- fix self.n
-- fix promise prior (voorbeeld 2 regel 18) value wordt niet overschreven
+- "P_i heeft wel consesus" geaccepteerde waarde fixen
 """
