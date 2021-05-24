@@ -1,3 +1,5 @@
+"""Our Distributed System that contains a network of computers."""
+
 from Computer import Computer
 from Message import Message
 from Network import Network
@@ -20,14 +22,17 @@ class DisSystem:
                 computer.prior = self.n
                 computer.prior_value = message.value
 
+            # Send PREPARE to all Acceptors
             for acceptor in self.A:
                 m = Message(computer, acceptor, "PREPARE", None, self.n)
                 queue_message(self.N, m)
 
+        # If the previous message type was PREPARE
         elif message.type == "PREPARE":
             m = Message(computer, message.src, "PROMISE", computer.value, self.n)
             queue_message(self.N, m)    # TODO: create functie for prior
 
+        # If the previous message type was PROMISE
         elif message.type == "PROMISE":
             prior = f"(Prior: {None if message.src.prior == 0 else f'n={message.src.prior}, v= {message.src.value}'})"
             print(f"{self.current_tick.zfill(3)}: {message.src.name} -> {message.dst.name}  {message.type}  n={self.n}  {prior}")
@@ -40,6 +45,7 @@ class DisSystem:
             message.src.prior = self.n
             queue_message(self.N, m)
 
+        # If the previous message type was ACCEPT
         elif message.type == "ACCEPT":
             if computer.prior is not None:
                 for acceptor in self.A:
@@ -52,7 +58,16 @@ class DisSystem:
             pass
 
     def simulation(self, n_p, n_a, tmax, E):
-        # np, na , maxticks = inputs[0]
+        """
+        Simulation to manage all the messages and Network queue's.
+
+        :param n_p: Amount of Proposers
+        :param n_a: Amount of Acceptors
+        :param tmax: Maximum amount of ticks
+        :param E: List of events
+        :return: None
+        """
+        # np, na , maxticks = inputs[0]  ########## Heb je deze nog nodig?
 
         self.total_computers = n_a + 1  # Acceptors + the proposer
         for i in range(n_p):
@@ -60,12 +75,7 @@ class DisSystem:
         for i in range(n_a):
             self.A.append(Computer(f"A{i + 1}", tot_comps=self.total_computers))
         self.total_computers = len(self.A) + 1
-        # p1 = Computer()
-        # p2 = Computer()
-        #
-        # a1 = Computer()
-        # a2 = Computer()
-        # a3 = Computer()
+
         for t in range(tmax):
 
             if len(self.N.queue) == 0 and len(E) == 0:
