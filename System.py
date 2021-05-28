@@ -4,12 +4,14 @@ from Computer import Computer
 from Message import Message
 from Network import Network
 from message_functions import *
+from Matrix import Matrix
 
 
 class DisSystem:
     def __init__(self):
         self.P = []     # Proposers
         self.A = []     # Acceptors
+        self.L = []     # Learners
         self.N = Network()  # queue
         self.total_computers = None       # Computers
         self.n = 0
@@ -63,6 +65,7 @@ class DisSystem:
 
         :param n_p: Amount of Proposers
         :param n_a: Amount of Acceptors
+        :param n_l: Amount of Learners
         :param tmax: Maximum amount of ticks
         :param E: List of events
         :return: None
@@ -77,7 +80,6 @@ class DisSystem:
         self.total_computers = len(self.A) + 1
 
         for t in range(tmax):
-
             if len(self.N.queue) == 0 and len(E) == 0:
                 return
             e = E[0] if t == E[0][0] else None

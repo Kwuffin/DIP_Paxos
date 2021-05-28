@@ -22,7 +22,7 @@ def give_inputs():
 
     inputs_list = []
     for str in input_list:
-        inputs_list.append(str.split(" "))
+        inputs_list.append(str.split(" ", 3))
 
     # Converts strings to integers where necessary
     for line in inputs_list:
