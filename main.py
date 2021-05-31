@@ -1,7 +1,6 @@
-from Computer import Computer
+"""Our main program where we run all core functions from"""
+
 from System import DisSystem
-from Message import Message
-from Network import Network
 
 
 def give_inputs():
@@ -51,7 +50,7 @@ def create_events(inputs):
         msg_V = None
 
         if event[1] == "PROPOSE":
-            msg_P = int(event[2])
+            msg_P = f"P{event[2]}"
             msg_V = event[3]
 
         elif event[1] == "FAIL":
@@ -82,14 +81,28 @@ def start_sim(inputs):
     start = inputs[0]
     n_p = start[0]
     n_a = start[1]
-    tmax = start[2]
+    n_l = start[2]
+    tmax = start[3]
     events = inputs[1:]
-    E = create_events(events)
 
-    simulation(n_p, n_a, tmax, E)
+    E = create_events(events)
+    sim = DisSystem()
+
+    sim.simulation(n_p, n_a, n_l, tmax, E)
 
 
 if __name__ == '__main__':
-    # events = give_inputs()
-    # start_sim(events)
-    print(create_events(test2[1:]))
+    events = give_inputs()
+    start_sim(events)
+
+    # Some shortcuts, uncomment if you want to test these
+    # Example 3 from Canvas
+    # test = [(1, 3, 1, 1000), (0, "PROPOSE", 1, "nl: g"), (100, "PROPOSE", 1, "nl:ga"), (200, "PROPOSE", 1, "nl:af"),
+    #         (300, "PROPOSE", 1, "nl:f "), (400, "PROPOSE", 1, "en: g"), (500, "PROPOSE", 1, "en:gr"),
+    #         (600, "PROPOSE", 1, "en:re"), (700, "PROPOSE", 1, "en:ea"), (800, "PROPOSE", 1, "en:at"),
+    #         (900, "PROPOSE", 1, "en:t "), (0, "END")]
+
+    # Example 2 from Canvas
+    # test2 = [(2, 3, 0, 50), (0, "PROPOSE", 1, 42), (8, "FAIL", "PROPOSER", 1), (11, "PROPOSE", 2, 37),
+    #          (26, "RECOVER", "PROPOSER", 1), (0, "END")]
+    # start_sim(test)
